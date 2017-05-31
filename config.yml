@@ -1,0 +1,4 @@
+# Chat format used when using /sendchat  Use <player> as placeholder for the default player name or the one specified in the argument, and use <message> as a placeholder for the message.
+chat-format:  <<player>> <message>
+# The player name used when one is not specified by the -p argument in the /sendchat command.
+default-player:  DefaultPlayer

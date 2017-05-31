@@ -1,0 +1,30 @@
+name: SendMessage
+main: me.AlanZ.SendMessage
+version: 1.8
+commands:
+   sendmsg:
+      description: Sends a message to a player, by itself.
+      usage: /<command> <player> <message>
+      permission: sendmessage.use
+   sendbc:
+      description: Broadcasts a colored message to the entire server, by itself.
+      usage: /<command> <message>
+      aliases: sendbcast
+      permission: sendmessage.broadcast
+   sendchat:
+      description: Broadcasts a message in the chat format specified in the config.
+      usage: /<command> [-p player] <message>
+      permission: sendmessage.chat
+   smreload:
+      description: Reloads SendMessage's configuration file.
+      usage: /<command>
+      permission: sendmessage.reload
+   colors:
+      description: Sends you a message to remind you of all the chat colors and formats.
+      usage: /<command>
+      permission: sendmessage.colors
+   detectchatformat:
+      description: Attempts to detect the chat format and stores the result in the config.
+      usage: /<command>
+      aliases: dcf
+      permission: sendmessage.detectchatformat
