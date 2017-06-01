@@ -1,0 +1,1 @@
+SendMessage is a Spigot Minecraft plugin that allows you to anonymously send messages to players.  It has grown since 1.0 and now allows you to send broadcasts to the entire server, see the list of color and formatting codes, and send a fake chat message.  You can see the full description on the Spigot page at:  https://www.spigotmc.org/resources/sendmessage.20861/
