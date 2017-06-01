@@ -1,6 +1,6 @@
 name: SendMessage
 main: me.AlanZ.SendMessage
-version: 1.8
+version: 1.9
 commands:
    sendmsg:
       description: Sends a message to a player, by itself.
