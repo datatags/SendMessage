@@ -1,4 +1,4 @@
-package me.AlanZ;
+package me.datatags.sendmessage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,6 +17,9 @@ public class ChatListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEvent(AsyncPlayerChatEvent e) {
 		Player player = e.getPlayer();
+		if (!(e.getMessage().contains(sm.detectChatMessage) || e.getMessage().contains(sm.dcfSetPlayerMessage))) {
+			return;
+		}
 		for (String pname : sm.playersDetecting) {
 			if (player.getName() == pname) {
 				sm.playersDetecting.remove(player.getName());
@@ -24,22 +27,22 @@ public class ChatListener implements Listener {
 				String format = e.getFormat();
 				if (format.contains(player.getDisplayName())) {
 					format = format.replace(player.getDisplayName(), "<player>");
-					if (e.getMessage().contains("player")) {
+					if (e.getMessage().contains(sm.dcfSetPlayerMessage)) {
 						sm.getConfig().set("default-player", player.getDisplayName().replaceAll(String.valueOf(ChatColor.COLOR_CHAR), "&"));
+						player.sendMessage(ChatColor.GREEN + "Set default player to " + player.getDisplayName());
 					}
-					player.sendMessage(ChatColor.GREEN + "Set default player to " + player.getDisplayName());
 				} else if (format.contains(player.getName())) {
 					format = format.replace(player.getName(), "<player>");
-					if (e.getMessage().contains("player")) {
+					if (e.getMessage().contains(sm.dcfSetPlayerMessage)) {
 						sm.getConfig().set("default-player", player.getName());
+						player.sendMessage(ChatColor.GREEN + "Set default player to " + player.getName());
 					}
-					player.sendMessage(ChatColor.GREEN + "Set default player to " + player.getName());
 				} else if (format.contains("%1$s")) {
 					format = format.replace("%1$s", "<player>");
-					if (e.getMessage().contains("player")) {
+					if (e.getMessage().contains(sm.dcfSetPlayerMessage)) {
 						sm.getConfig().set("default-player", player.getName());
+						player.sendMessage(ChatColor.GREEN + "Set default player to " + player.getName());
 					}
-					player.sendMessage(ChatColor.GREEN + "Set default player to " + player.getName());
 				} else {
 					player.sendMessage(ChatColor.RED + "Could not find player name " + player.getName() + " or display name " + player.getDisplayName() + " in:  " + format);
 					player.sendMessage(ChatColor.RED + "If you have a nickname on, you may have an incompatible chat plugin.  Please report this message to AlanZ and/or configure manually.");

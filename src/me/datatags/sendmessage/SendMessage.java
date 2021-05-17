@@ -1,4 +1,4 @@
-package me.AlanZ;
+package me.datatags.sendmessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -23,16 +22,21 @@ public class SendMessage extends JavaPlugin {
 	public Permission   colorsPermission     = new Permission("sendmessage.colors");
 	public Permission   detectChatPermission = new Permission("sendmessage.detectchatformat");
 	public String       noPermissionMessage  = ChatColor.RED + "You do not have permission to use this command.";
+	public String       notEnoughArgsMessage = ChatColor.RED + "Not enough arguments!";
+	public String       detectChatMessage    = "This is a test chat message by SendMessage.";
+	public String       dcfSetPlayerMessage  = "This is a test chat message by SendMessage. And don't forget to set the default player too.";
 	public List<String> playersDetecting     = new ArrayList<String>();
 	
 	@Override
 	public void onEnable() {
-		PluginManager pm = getServer().getPluginManager();
+		// Now that we're registering permissions in plugin.yml now instead, this is not necessary.
+		/*PluginManager pm = getServer().getPluginManager();
 		pm.addPermission(senderPermission);
 		pm.addPermission(broadcastPermission);
 		pm.addPermission(chatPermission);
 		pm.addPermission(reloadPermission);
 		pm.addPermission(colorsPermission);
+		pm.addPermission(detectChatPermission);*/
 		
 		this.getConfig().addDefault("chat-format", "<<player>>  <message>");
 		this.getConfig().addDefault("default-player", "DefaultPlayer");
@@ -71,6 +75,9 @@ public class SendMessage extends JavaPlugin {
 					sender.sendMessage(noPermissionMessage);
 					return true;
 				}
+			} else {
+				sender.sendMessage(notEnoughArgsMessage);
+				return false;
 			}
 		
 		} else if (cmd.getName().equalsIgnoreCase("sendbc")) {
@@ -83,6 +90,9 @@ public class SendMessage extends JavaPlugin {
 					}
 					Bukkit.broadcastMessage(appendedMessage);
 					sender.sendMessage(ChatColor.GREEN + "Broadcast successfully sent!");
+				} else {
+					sender.sendMessage(notEnoughArgsMessage);
+					return false;
 				}
 			} else {
 				sender.sendMessage(noPermissionMessage);
@@ -94,6 +104,10 @@ public class SendMessage extends JavaPlugin {
 					int initialOffset = 0;
 					String playerName = "";
 					if (args[0].equalsIgnoreCase("-p")) {
+						if (args.length < 3) {
+							sender.sendMessage(notEnoughArgsMessage);
+							return false;
+						}
 						playerName = args[1];
 						initialOffset = 2;
 					} else {
@@ -106,6 +120,9 @@ public class SendMessage extends JavaPlugin {
 					}
 					Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', this.getConfig().getString("chat-format")).replace("<player>", ChatColor.translateAlternateColorCodes('&', playerName)).replace("<message>", appendedMessage));
 					sender.sendMessage(ChatColor.GREEN + "Chat message successfully sent!");
+				} else {
+					sender.sendMessage(notEnoughArgsMessage);
+					return false;
 				}
 			} else {
 				sender.sendMessage(noPermissionMessage);
@@ -131,15 +148,16 @@ public class SendMessage extends JavaPlugin {
 			if (sender.hasPermission(detectChatPermission)) {
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
-					for (String pname : playersDetecting) {
-						if (player.getName() == pname) {
-							playersDetecting.remove(player.getName());
-							player.sendMessage(ChatColor.YELLOW + "Chat format detection cancelled!");
-							return true;
-						}
+					if (args.length == 1 && args[0].equalsIgnoreCase("setplayer")) {
+						playersDetecting.add(player.getName());
+						player.chat(dcfSetPlayerMessage);
+					} else if (args.length == 0) {
+						playersDetecting.add(player.getName());
+						player.chat(detectChatMessage);
+					} else {
+						player.sendMessage(ChatColor.RED + "Invalid arguments!"); //Not using notEnoughArgsMessage here because the outcome could be that the user has specified more than one argument and/or an incorrect one. 
+						return false;
 					}
-					playersDetecting.add(player.getName());
-					player.sendMessage(ChatColor.YELLOW + "Please say a message in the chat to detect the chat format.  Include 'player' in your message to save your username as the default player.");
 				} else {
 					sender.sendMessage(ChatColor.RED + "This command can only be used as a player!");
 				}

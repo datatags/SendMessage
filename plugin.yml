@@ -1,30 +1,62 @@
 name: SendMessage
-main: me.AlanZ.SendMessage
-version: 1.9
+version: 1.10.1
+description: Sends messages to your players with no trace of the sender!
+author: Datatags
+website: https://www.spigotmc.org/resources/sendmessage.20861/
+main: me.datatags.sendmessage.SendMessage
+api-version: 1.13
 commands:
-   sendmsg:
-      description: Sends a message to a player, by itself.
-      usage: /<command> <player> <message>
-      permission: sendmessage.use
-   sendbc:
-      description: Broadcasts a colored message to the entire server, by itself.
-      usage: /<command> <message>
-      aliases: sendbcast
-      permission: sendmessage.broadcast
-   sendchat:
-      description: Broadcasts a message in the chat format specified in the config.
-      usage: /<command> [-p player] <message>
-      permission: sendmessage.chat
-   smreload:
-      description: Reloads SendMessage's configuration file.
-      usage: /<command>
-      permission: sendmessage.reload
-   colors:
-      description: Sends you a message to remind you of all the chat colors and formats.
-      usage: /<command>
-      permission: sendmessage.colors
-   detectchatformat:
-      description: Attempts to detect the chat format and stores the result in the config.
-      usage: /<command>
-      aliases: dcf
-      permission: sendmessage.detectchatformat
+    sendmsg:
+        description: Sends a message to a player, by itself.
+        usage: /<command> <player> <message>
+        #permission: sendmessage.use
+    sendbc:
+        description: Broadcasts a colored message to the entire server, by itself.
+        usage: /<command> <message>
+        aliases: sendbcast
+        #permission: sendmessage.broadcast
+    sendchat:
+        description: Broadcasts a message in the chat format specified in the config.
+        usage: /<command> [-p player] <message>
+        #permission: sendmessage.chat
+    smreload:
+        description: Reloads SendMessage's configuration file.
+        usage: /<command>
+        #permission: sendmessage.reload
+    colors:
+        description: Sends you a message to remind you of all the chat colors and formats.
+        usage: /<command>
+        #permission: sendmessage.colors
+    detectchatformat:
+        description: Attempts to detect the chat format and stores the result in the config.
+        usage: /<command> [setplayer]
+        aliases: dcf
+        #permission: sendmessage.detectchatformat
+permissions:
+    sendmessage.*:
+        description: Allows access to all SendMessage commands.
+        children:
+            sendmessage.use: true
+            sendmessage.broadcast: true
+            sendmessage.chat: true
+            sendmessage.reload: true
+            sendmessage.colors: true
+            sendmessage.detectchatformat: true
+    sendmessage.use:
+        description: Grants use of the /sendmsg command to send messages to one player at a time.
+        default: op
+    sendmessage.broadcast:
+        description: Grants use of /sendbc which sends a message to all players online.
+        default: op
+    sendmessage.chat:
+        description: Grants use of the /sendchat command, allowing the user to send a fake chat message to everyone online.
+        default: op
+    sendmessage.reload:
+        description: Allows the beholder to reload the configuration file with /smreload
+        default: op
+    sendmessage.colors:
+        description: Lets the user see the different color and formatting codes with /colors
+        default: op
+    sendmessage.detectchatformat:
+        description: Permits the player to use /dcf to automatically detect the chat format.
+        default: op
